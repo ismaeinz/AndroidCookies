@@ -9,5 +9,5 @@ data class Gym(
     val id: Int,
     val name: String,
     val place: String,
-    val isFavourite: Boolean = false
+    var isFavourite: Boolean = false
 )
