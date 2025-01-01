@@ -2,10 +2,8 @@ package com.example.androidcookiesfrom1to4
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,11 +26,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Preview
 @Composable
 fun GymsScreen() {
-    val vm: GymsViewModel = viewModel()
+    val vmGyms: GymsViewModel = viewModel()
+
     LazyColumn {
-        items(vm.state) { gym ->
+        items(vmGyms.state) { gym ->
             GymItem(gym) { gymId ->
-                vm.toggleFavouriteState(gymId)
+                vmGyms.toggleFavouriteState(gymId)
             }
         }
 
@@ -49,18 +48,19 @@ fun GymItem(gym: Gym, onClick: (Int) -> Unit) {
     Card(modifier = Modifier.padding(8.dp)) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize()
         ) {
-            DefaultIcon(Icons.Filled.Place, Modifier.weight(.2f))
+            DefaultIcon(
+                vector = Icons.Filled.Place,
+                modifier = Modifier.weight(.1f)
+            )
             GymDetails(
                 gym,
-                Modifier.weight(.6f)
+                Modifier.weight(.7f)
             )
             DefaultIcon(
                 icon,
                 Modifier
-                    .weight(.2f)
+                    .weight(.1f)
             ) {
                 onClick(gym.id)
             }
@@ -71,15 +71,17 @@ fun GymItem(gym: Gym, onClick: (Int) -> Unit) {
 
 @Composable
 fun GymDetails(gym: Gym, modifier: Modifier) {
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         Text(
             text = gym.name,
             style = MaterialTheme.typography.headlineSmall,
-            color = Color.Gray
+            color = Color.Gray,
         )
         Text(
             text = gym.place,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             color = Color.DarkGray
         )
 
