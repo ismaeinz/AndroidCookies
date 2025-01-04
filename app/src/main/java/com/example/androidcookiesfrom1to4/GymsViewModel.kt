@@ -15,14 +15,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class GymsViewModel(
     private val stateHandle: SavedStateHandle,
-) : ViewModel(
-
-) {
+) : ViewModel() {
     var state by mutableStateOf(emptyList<Gym>())
     private var apiServices: GymsApiServices
-    private val errorHandler = CoroutineExceptionHandler { _, throwable ->
-        throwable.printStackTrace()
-    }
+    private val errorHandler =
+        CoroutineExceptionHandler { _, throwable -> throwable.printStackTrace() }
 
     init {
         val retrofit: Retrofit = Retrofit.Builder()
@@ -40,7 +37,11 @@ class GymsViewModel(
     private fun getGyms() {
         viewModelScope.launch(errorHandler) {
             val gyms = getGymsFromRemoteDb()
-            state = gyms.restoredSelectedGyms()
+            withContext(Dispatchers.Main) {
+                state = gyms.restoredSelectedGyms()
+            }
+
+
         }
 
     }
@@ -58,7 +59,6 @@ class GymsViewModel(
         state = gyms
     }
 
-    //
     private fun storedSelectedGyms(gym: Gym) {
         val savedHandleList = stateHandle.get<List<Int>?>(FAV_IDS)
             .orEmpty()
