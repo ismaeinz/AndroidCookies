@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +39,16 @@ private fun GymsAroundApp() {
             navArgument("gym_id") {
                 type = NavType.IntType
             }
-        )) {
+
+        ), deepLinks = listOf(
+            navDeepLink {
+                deepLink {
+                    uriPattern = "https://www.gymsaround.com/details/{gym_id}"
+                }
+            }
+        )
+        )
+        {
             GymsDetailsScreen()
         }
 
