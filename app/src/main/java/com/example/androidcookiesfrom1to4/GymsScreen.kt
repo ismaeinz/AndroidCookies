@@ -19,33 +19,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 
-@Preview
 @Composable
-fun GymsScreen() {
+fun GymsScreen(onItemClick: (Int) -> Unit) {
     val vmGyms: GymsViewModel = viewModel()
 
     LazyColumn {
         items(vmGyms.state) { gym ->
-            GymItem(gym) { gymId ->
-                vmGyms.toggleFavouriteState(gymId)
-            }
+            GymItem(gym = gym,
+                onFavouriteClick = {
+                    vmGyms.toggleFavouriteState(it)
+                }, onItemClick = { id -> onItemClick(id) })
         }
 
     }
 }
 
 @Composable
-fun GymItem(gym: Gym, onClick: (Int) -> Unit) {
+fun GymItem(gym: Gym, onFavouriteClick: (Int) -> Unit, onItemClick: (Int) -> Unit) {
     val icon = if (gym.isFavourite) {
         Icons.Filled.Favorite
     } else {
         Icons.Filled.FavoriteBorder
     }
-    Card(modifier = Modifier.padding(8.dp)) {
+    Card(modifier = Modifier
+        .padding(8.dp)
+        .clickable { onItemClick(gym.id) }) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -62,7 +63,7 @@ fun GymItem(gym: Gym, onClick: (Int) -> Unit) {
                 Modifier
                     .weight(.1f)
             ) {
-                onClick(gym.id)
+                onFavouriteClick(gym.id)
             }
 
         }

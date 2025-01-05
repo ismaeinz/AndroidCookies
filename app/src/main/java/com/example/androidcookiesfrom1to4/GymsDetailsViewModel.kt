@@ -1,6 +1,7 @@
 package com.example.androidcookiesfrom1to4
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -9,7 +10,11 @@ import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class GymsDetailsViewModel : ViewModel() {
+class GymsDetailsViewModel(
+    private val stateHandler: SavedStateHandle,
+) : ViewModel(
+
+) {
     val state = mutableStateOf<Gym?>(null)
 
     //    implemntion for interface
@@ -24,7 +29,9 @@ class GymsDetailsViewModel : ViewModel() {
                 "https://cairo-gyms-f29c8-default-rtdb.firebaseio.com/"
             ).build()
         apiServices = retroFit.create(GymsApiServices::class.java)
-        getGym(2)
+//        getId
+        val gymId = stateHandler.get<Int>("gym_id") ?: 0
+        getGym(gymId)
     }
 
     private fun getGym(id: Int) {
